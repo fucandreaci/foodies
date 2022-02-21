@@ -33,7 +33,6 @@ public class Utente {
     private String email;
     private String password;
     private String biografia;
-    private LocalDateTime dataFineBan;
     private String immagineProfilo;
     
     @OneToMany(mappedBy = "utente")
@@ -54,7 +53,7 @@ public class Utente {
     public Utente() {
     }
 
-	public Utente(int id, String nome, String cognome, String username, String email, String password, String biografia, LocalDateTime dataFineBan, String immagineProfilo) {
+	public Utente(int id, String nome, String cognome, String username, String email, String password, String biografia, String immagineProfilo) {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
@@ -62,18 +61,16 @@ public class Utente {
         this.email = email;
         this.password = password;
         this.biografia = biografia;
-        this.dataFineBan = dataFineBan;
         this.immagineProfilo = immagineProfilo;
     }
 
-    public Utente(String nome, String cognome, String username, String email, String password, String biografia, LocalDateTime dataFineBan, String immagineProfilo) {
+    public Utente(String nome, String cognome, String username, String email, String password, String biografia, String immagineProfilo) {
         this.nome = nome;
         this.cognome = cognome;
         this.username = username;
         this.email = email;
         this.password = password;
         this.biografia = biografia;
-        this.dataFineBan = dataFineBan;
         this.immagineProfilo = immagineProfilo;
     }
 
@@ -125,14 +122,6 @@ public class Utente {
         this.biografia = biografia;
     }
 
-    public LocalDateTime getDataFineBan() {
-        return dataFineBan;
-    }
-
-    public void setDataFineBan(LocalDateTime dataFineBan) {
-        this.dataFineBan = dataFineBan;
-    }
-
     public String getImmagineProfilo() {
         return immagineProfilo;
     }
@@ -178,7 +167,7 @@ public class Utente {
 	@Override
 	public String toString() {
 		return "Utente [id=" + id + ", nome=" + nome + ", cognome=" + cognome + ", username=" + username + ", email="
-				+ email + ", password=" + password + ", biografia=" + biografia + ", dataFineBan=" + dataFineBan
+				+ email + ", password=" + password + ", biografia=" + biografia
 				+ ", immagineProfilo=" + immagineProfilo + ", posts=" + posts + ", likes=" + likes + ", unlikes="
 				+ unlikes + "]";
 	}
