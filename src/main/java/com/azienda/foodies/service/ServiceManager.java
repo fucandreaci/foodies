@@ -72,7 +72,6 @@ public class ServiceManager {
 								throw new ExistingUser("Esiste già un utente con tale email.");
 							}
 						} else {
-							System.out.println("Username: " + utenteRepository.findByUsername(username));
 							throw new ExistingUser("Esiste già un utente con tale username.");
 						}
 						
