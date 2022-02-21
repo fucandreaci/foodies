@@ -2,6 +2,7 @@ package com.azienda.foodies.service;
 
 import java.util.List;
 
+import com.azienda.foodies.model.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,8 @@ import com.azienda.foodies.repository.HashtagRepository;
 import com.azienda.foodies.repository.PostRepository;
 import com.azienda.foodies.repository.UtenteRepository;
 import com.azienda.foodies.utils.CheckOnParameters;
+
+import java.util.List;
 
 @Service("ServiceManager")
 @Transactional
@@ -94,4 +97,15 @@ public class ServiceManager {
 	
 	
 
+	public List<Post> getAllPosts () throws Exception {
+		return postRepository.findAll();
+	}
+
+	public Post inserisciPost (Post post) throws Exception {
+		try {
+			return postRepository.save(post);
+		} catch (Exception e) {
+			throw new Exception(e);
+		}
+	}
 }
