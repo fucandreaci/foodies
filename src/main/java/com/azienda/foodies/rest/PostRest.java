@@ -43,14 +43,14 @@ public class PostRest {
 	}
 
 	@GetMapping("/getByUser")
-	public ResponseEntity<List<Post>> getByUser(@RequestBody UtenteDTO utenteDTO) {
+	public ResponseEntity<?> getByUser(@RequestBody UtenteDTO utenteDTO) {
 		try {
 			//TODO: check user auth
-			Utente utente = null;
+			Utente utente = serviceManager.getUtente(utenteDTO.getUsername(), utenteDTO.getPassword());
 
 			// Credenziali utente non valide
 			if (utente == null)
-				return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>("Credenziali non valide", HttpStatus.BAD_REQUEST);
 
 			// Get posts dell'utente
 			List<Post> posts = serviceManager.getPostsByUser(utente.getId());
@@ -83,14 +83,13 @@ public class PostRest {
 	}
 
 	@GetMapping("/getLastUpdateBetween/{from}/{to}")
-	public ResponseEntity<List<Post>> getByUser(@RequestBody UtenteDTO utenteDTO, @PathVariable("from") LocalDateTime from, @PathVariable("to") LocalDateTime to) {
+	public ResponseEntity<?> getByLastUpdate(@RequestBody UtenteDTO utenteDTO, @PathVariable("from") LocalDateTime from, @PathVariable("to") LocalDateTime to) {
 		try {
-			//TODO: check user auth
-			Utente utente = null;
+			Utente utente = serviceManager.getUtente(utenteDTO.getUsername(), utenteDTO.getPassword());
 
 			// Credenziali utente non valide
 			if (utente == null)
-				return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>("Credenziali non valide", HttpStatus.BAD_REQUEST);
 
 			// Get posts dell'utente
 			List<Post> posts = serviceManager.getPostsLastUpdateBetween(from, to);
