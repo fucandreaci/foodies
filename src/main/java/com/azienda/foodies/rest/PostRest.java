@@ -22,11 +22,10 @@ public class PostRest {
 	@Autowired
 	private ServiceManager serviceManager;
 
-	@PostMapping(path ="", consumes = "application/json")
+	@PostMapping(path ="/getAll", consumes = "application/json")
 	public ResponseEntity<List<Post>> getAll(@RequestBody UtenteDTO utenteDTO) {
 		try {
-			// TODO: controllo delle credenziali
-			if (utenteDTO.getUsername() != null) {
+			if (serviceManager.getUtente(utenteDTO.getUsername(), utenteDTO.getPassword()) != null) {
 				List<Post> posts = serviceManager.getAllPosts();
 				if (posts.isEmpty()) {
 					return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -65,17 +64,16 @@ public class PostRest {
 		}
 	}
 
-	@PostMapping(path = "", consumes = "application/json")
+	@PostMapping(path = "/insert", consumes = "application/json")
 	public ResponseEntity<Post> insertPost(@RequestBody Post post, @RequestBody UtenteDTO utenteDTO) {
 		try {
-			// TODO: controllo delle credenziali nell'if
-			if (post.getId() != 0) {
+			if (serviceManager.getUtente(utenteDTO.getUsername(), utenteDTO.getPassword()) == null || post.getTitolo() == null || post.getDescrizione() == null) {
 				return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			} else {
+				serviceManager.inserisciPost(post);
+
+				return new ResponseEntity<>(post, HttpStatus.CREATED);
 			}
-
-			Post post1 = serviceManager.inserisciPost(post);
-
-			return new ResponseEntity<>(post, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

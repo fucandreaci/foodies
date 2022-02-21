@@ -11,7 +11,8 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    
+
+	private String titolo;
     private String descrizione;
     private LocalDateTime dataPubblicazione;
     private String immagine;
@@ -38,17 +39,19 @@ public class Post {
 	
 	public Post() {}
 
-	public Post(String descrizione, LocalDateTime dataPubblicazione, String immagine, LocalDateTime lastUpdate) {
+	public Post(String titolo, String descrizione, LocalDateTime dataPubblicazione, String immagine, LocalDateTime lastUpdate) {
 		super();
+		this.titolo = titolo;
 		this.descrizione = descrizione;
 		this.dataPubblicazione = dataPubblicazione;
 		this.immagine = immagine;
 		this.lastUpdate = lastUpdate;
 	}
 
-	public Post(int id, String descrizione, LocalDateTime dataPubblicazione, String immagine, LocalDateTime lastUpdate) {
+	public Post(int id, String titolo, String descrizione, LocalDateTime dataPubblicazione, String immagine, LocalDateTime lastUpdate) {
 		super();
 		this.id = id;
+		this.titolo = titolo;
 		this.descrizione = descrizione;
 		this.dataPubblicazione = dataPubblicazione;
 		this.immagine = immagine;
@@ -62,6 +65,10 @@ public class Post {
 	public void setId(int id) {
 		this.id = id;
 	}
+
+	public String getTitolo() { return titolo; }
+
+	public void setTitolo(String titolo) { this.titolo = titolo; }
 
 	public String getDescrizione() {
 		return descrizione;
