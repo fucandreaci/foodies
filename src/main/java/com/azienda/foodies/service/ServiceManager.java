@@ -19,6 +19,9 @@ import com.azienda.foodies.utils.CheckOnParameters;
 
 import java.util.List;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Service("ServiceManager")
 @Transactional
 public class ServiceManager {
@@ -107,5 +110,12 @@ public class ServiceManager {
 		} catch (Exception e) {
 			throw new Exception(e);
 		}
+	}
+	public List<Post> getPostsByUser (Integer userId) {
+		return postRepository.getPostByUtente(userId);
+	}
+
+	public List<Post> getPostsLastUpdateBetween(LocalDateTime from, LocalDateTime to) {
+		return postRepository.getPostByLastUpdateBetween(from, to);
 	}
 }

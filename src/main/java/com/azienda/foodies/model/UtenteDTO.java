@@ -1,5 +1,6 @@
 package com.azienda.foodies.model;
 
+
 public class UtenteDTO {
     private String username;
     private String password;
