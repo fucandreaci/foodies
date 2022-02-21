@@ -15,6 +15,7 @@ public class Post {
     private String descrizione;
     private LocalDateTime dataPubblicazione;
     private String immagine;
+	private LocalDateTime lastUpdate;
     
     @ManyToOne
     @JoinColumn(name = "id_utente")
@@ -37,19 +38,21 @@ public class Post {
 	
 	public Post() {}
 
-	public Post(String descrizione, LocalDateTime dataPubblicazione, String immagine) {
+	public Post(String descrizione, LocalDateTime dataPubblicazione, String immagine, LocalDateTime lastUpdate) {
 		super();
 		this.descrizione = descrizione;
 		this.dataPubblicazione = dataPubblicazione;
 		this.immagine = immagine;
+		this.lastUpdate = lastUpdate;
 	}
 
-	public Post(int id, String descrizione, LocalDateTime dataPubblicazione, String immagine) {
+	public Post(int id, String descrizione, LocalDateTime dataPubblicazione, String immagine, LocalDateTime lastUpdate) {
 		super();
 		this.id = id;
 		this.descrizione = descrizione;
 		this.dataPubblicazione = dataPubblicazione;
 		this.immagine = immagine;
+		this.lastUpdate = lastUpdate;
 	}
 
 	public int getId() {
@@ -122,6 +125,14 @@ public class Post {
 
 	public void setUnlikes(List<Utente> unlikes) {
 		this.unlikes = unlikes;
+	}
+
+	public LocalDateTime getLastUpdate() {
+		return lastUpdate;
+	}
+
+	public void setLastUpdate(LocalDateTime lastUpdate) {
+		this.lastUpdate = lastUpdate;
 	}
 
 	@Override
