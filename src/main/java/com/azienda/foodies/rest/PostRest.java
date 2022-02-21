@@ -44,7 +44,6 @@ public class PostRest {
 	@GetMapping("/getByUser")
 	public ResponseEntity<?> getByUser(@RequestBody UtenteDTO utenteDTO) {
 		try {
-			//TODO: check user auth
 			Utente utente = serviceManager.getUtente(utenteDTO.getUsername(), utenteDTO.getPassword());
 
 			// Credenziali utente non valide
