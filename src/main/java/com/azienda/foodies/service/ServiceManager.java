@@ -137,10 +137,10 @@ public class ServiceManager {
 	}
 
 	public List<Post> getPostContainsTitoloOrTesto (String titolo, String testo) {
-		return postRepository.findByTitoloContainsOrDescrizioneContainsAndVisibileTrue(titolo, testo);
+		return postRepository.findByVisibileIsAndTitoloContainsOrDescrizioneContains(true, titolo, testo);
 	}
 	public List<Post> getPostContainsTitoloOrTestoProprietario (String titolo, String testo, Utente u) {
-		return postRepository.findByTitoloContainsOrDescrizioneContainsAndUtenteEqualsAndVisibileTrue(titolo, testo, u);
+		return postRepository.findByUtenteEqualsAndVisibileTrueAndTitoloContainsOrDescrizioneContains(u, titolo, testo);
 	}
 
 	public List<Utente> findLikers (Integer postId) {
@@ -222,7 +222,7 @@ public class ServiceManager {
 				throw new InvalidFields("Devi essere admin o proprietario del post.");
 			}
 		} catch (Exception e) {
-			throw new Exception(e);
+			throw e;
 		}
 	}
 }

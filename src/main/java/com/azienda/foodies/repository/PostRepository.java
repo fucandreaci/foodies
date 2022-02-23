@@ -15,7 +15,7 @@ public interface PostRepository extends CrudRepository<Post, Integer> {
     public List<Post> findAll();
     List<Post> getPostByUtenteAndVisibileTrue (Utente utente);
     List<Post> getPostByLastUpdateBetweenAndVisibileTrue (LocalDateTime from, LocalDateTime to);
-    List<Post> findByTitoloContainsOrDescrizioneContainsAndVisibileTrue (String titolo, String descrizione);
-    List<Post> findByTitoloContainsOrDescrizioneContainsAndUtenteEqualsAndVisibileTrue (String titolo, String descrizione, Utente user);
+    List<Post> findByVisibileIsAndTitoloContainsOrDescrizioneContains (boolean b, String titolo, String descrizione);
+    List<Post> findByUtenteEqualsAndVisibileTrueAndTitoloContainsOrDescrizioneContains (Utente user, String titolo, String descrizione);
     List<Post> getPostByLastUpdateBetweenAndUtenteEqualsAndVisibileTrue (LocalDateTime from, LocalDateTime to, Utente utente);
 }

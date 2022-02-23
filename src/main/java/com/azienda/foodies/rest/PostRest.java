@@ -159,16 +159,16 @@ public class PostRest {
 		}
 	}
 
-	@PostMapping("/ownPostByLastUpdate/{from}/{to}")
-	public ResponseEntity<List<Post>> getOwnPostsByLastUpdate (@RequestBody UtenteDTO utenteDTO, @PathVariable("from") LocalDateTime from, @PathVariable("to") LocalDateTime to) {
+	@GetMapping("/ownPostByLastUpdate")
+	public ResponseEntity<List<Post>> getOwnPostsByLastUpdate (@RequestBody DateDTO dateDTO) {
 		try {
-			Utente utente = serviceManager.getUtente(utenteDTO.getUsername(), utenteDTO.getPassword());
+			Utente utente = serviceManager.getUtente(dateDTO.getUsername(), dateDTO.getPassword());
 
 			if (utente == null) {
 				return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 			}
 
-			List<Post> posts = serviceManager.getPostsLastUpdateBetween(from, to, utente);
+			List<Post> posts = serviceManager.getPostsLastUpdateBetween(dateDTO.getFrom(), dateDTO.getTo(), utente);
 
 
 			if (!posts.isEmpty()) {
@@ -227,7 +227,7 @@ public class PostRest {
 		try {
 			Post post = serviceManager.getPostById(idPost);
 			Utente utente = serviceManager.getUtente(postDTO.getUsername(), postDTO.getPassword());
-			if (post == null || utente == null || post.getUtente().getId() == utente.getId()) {
+			if (post == null || utente == null || post.getUtente().getId() != utente.getId()) {
 				return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 			}
 
