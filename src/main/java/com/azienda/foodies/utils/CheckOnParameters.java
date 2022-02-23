@@ -13,6 +13,10 @@ public class CheckOnParameters {
 		if(args != null) {
 			boolean campoVuoto = false;
 			for(String arg : args) {
+				if (arg == null) {
+					campoVuoto = true;
+					continue;
+				}
 				arg = arg.replace(" ", "");
 				if(arg.isEmpty()) {
 					campoVuoto = true;

@@ -7,6 +7,8 @@ package com.azienda.foodies.model;
  * Copyright © 2022-2022 Andrea Fucci
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 //import javax.persistence.GeneratedValue;
 //import javax.persistence.GenerationType;
@@ -36,18 +38,21 @@ public class Utente {
     private String immagineProfilo;
     
     @OneToMany(mappedBy = "utente")
+    @JsonIgnore
     private List<Post> posts = new ArrayList<Post>();
     
     @ManyToMany
     @JoinTable(name="likes",joinColumns =
     @JoinColumn(name="utente_id"), inverseJoinColumns = 
     @JoinColumn(name="post_id"))
+    @JsonIgnore
     private List<Post> likes = new ArrayList<Post>();
     
     @ManyToMany
     @JoinTable(name="unlikes",joinColumns =
     @JoinColumn(name="utente_id"), inverseJoinColumns = 
     @JoinColumn(name="post_id"))
+    @JsonIgnore
     private List<Post> unlikes = new ArrayList<Post>();
 
     public Utente() {

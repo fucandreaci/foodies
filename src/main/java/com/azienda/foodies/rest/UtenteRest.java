@@ -55,6 +55,7 @@ public class UtenteRest {
 			stato = HttpStatus.BAD_REQUEST;
 			return new ResponseEntity<>(e.getMessage(), stato);
 		} catch(Exception e) {
+			e.printStackTrace();
 			stato = HttpStatus.INTERNAL_SERVER_ERROR;
 			return new ResponseEntity<>("Errore nel server", stato);
 		}

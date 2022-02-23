@@ -41,7 +41,6 @@ public class Post {
 
 	public Post(String titolo, String descrizione, LocalDateTime dataPubblicazione, String immagine, LocalDateTime lastUpdate) {
 		super();
-		this.titolo = titolo;
 		this.descrizione = descrizione;
 		this.dataPubblicazione = dataPubblicazione;
 		this.immagine = immagine;
@@ -51,7 +50,6 @@ public class Post {
 	public Post(int id, String titolo, String descrizione, LocalDateTime dataPubblicazione, String immagine, LocalDateTime lastUpdate) {
 		super();
 		this.id = id;
-		this.titolo = titolo;
 		this.descrizione = descrizione;
 		this.dataPubblicazione = dataPubblicazione;
 		this.immagine = immagine;
@@ -66,9 +64,13 @@ public class Post {
 		this.id = id;
 	}
 
-	public String getTitolo() { return titolo; }
+	public String getTitolo() {
+		return titolo;
+	}
 
-	public void setTitolo(String titolo) { this.titolo = titolo; }
+	public void setTitolo(String titolo) {
+		this.titolo = titolo;
+	}
 
 	public String getDescrizione() {
 		return descrizione;

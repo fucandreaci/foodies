@@ -2,14 +2,13 @@ package com.azienda.foodies.service;
 
 import java.util.List;
 
+import com.azienda.foodies.exception.*;
 import com.azienda.foodies.model.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.azienda.foodies.DTO.UtenteDTORegistrazione;
-import com.azienda.foodies.exception.ExistingUser;
-import com.azienda.foodies.exception.InvalidFields;
 import com.azienda.foodies.model.Utente;
 import com.azienda.foodies.repository.CategoriaRepository;
 import com.azienda.foodies.repository.HashtagRepository;
@@ -21,6 +20,7 @@ import java.util.List;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service("ServiceManager")
 @Transactional
@@ -40,7 +40,7 @@ public class ServiceManager {
 	
 	public Utente getUtente(String username, String password){
 		List<Utente> u = utenteRepository.findByUsernameAndPassword(username, password);
-		
+
 		if(u == null || u.isEmpty())
 			return null;
 		else
@@ -96,9 +96,6 @@ public class ServiceManager {
 			throw new InvalidFields("Uno o più campi sono vuoti.");
 		}
 	}
-	
-	
-	
 
 	public List<Post> getAllPosts () throws Exception {
 		return postRepository.findAll();
@@ -117,5 +114,61 @@ public class ServiceManager {
 
 	public List<Post> getPostsLastUpdateBetween(LocalDateTime from, LocalDateTime to) {
 		return postRepository.getPostByLastUpdateBetween(from, to);
+	}
+
+	public List<Post> getPostContainsTitoloOrTesto (String titolo, String testo) {
+		return postRepository.findAllByTitoloContainsOrDescrizioneContains(titolo, testo);
+	}
+	public List<Post> getPostContainsTitoloOrTestoProprietario (String titolo, String testo, Utente u) {
+		return postRepository.findAllByTitoloContainsOrDescrizioneContainsAndUtenteEquals(titolo, testo, u);
+	}
+
+	public List<Utente> findLikers (Integer postId) {
+		return utenteRepository.findLikers(postId);
+	}
+
+	public Post getPostById (Integer id) {
+		Optional<Post> post = postRepository.findById(id);
+		return post.isPresent() ? post.get() : null;
+	}
+
+	public void addLike (Utente u, Integer postId) throws NotFoundException, AlreadyPutLikeException, AutolikeException {
+		Post post = getPostById(postId);
+		if (post == null)
+			throw new NotFoundException("Post non trovato");
+
+		if (utenteRepository.hasPutLike(postId, u.getId()).isPresent())
+			throw new AlreadyPutLikeException("Hai già messo like a questo post");
+
+		if (post.getUtente().getId() == u.getId()) throw new AutolikeException("Non puoi mettere like al tuo post");
+
+		u.getLikes().add(post);
+		u.getUnlikes().remove(post);
+
+		post.getLikes().add(u);
+		post.getUnlikes().remove(u);
+
+		postRepository.save(post);
+		utenteRepository.save(u);
+	}
+
+	public void addUnLike (Utente u, Integer postId) throws NotFoundException, AlreadyPutLikeException, AutolikeException {
+		Post post = getPostById(postId);
+		if (post == null)
+			throw new NotFoundException("Post non trovato");
+
+		if (utenteRepository.hasPutUnLike(postId, u.getId()).isPresent())
+			throw new AlreadyPutLikeException("Hai già messo unlike a questo post");
+
+		if (post.getUtente().getId() == u.getId()) throw new AutolikeException("Non puoi mettere unlike al tuo post");
+
+		u.getLikes().remove(post);
+		u.getUnlikes().add(post);
+
+		post.getLikes().remove(u);
+		post.getUnlikes().add(u);
+
+		postRepository.save(post);
+		utenteRepository.save(u);
 	}
 }
