@@ -72,6 +72,7 @@ public class ServiceManager {
 								
 								Utente user = new Utente(nome, cognome, username, email, password, biografia,
 										immagineProfilo);
+								user.setAdmin(false);
 								
 								utenteRepository.save(user);
 								return user;
@@ -186,6 +187,23 @@ public class ServiceManager {
 			post.setLastUpdate(LocalDateTime.now());
 
 			return postRepository.save(post);
+		} catch (Exception e) {
+			throw new Exception(e);
+		}
+	}
+	
+	public void deletePost (Utente utente, Integer idPost) throws Exception{
+		try {
+			Post post = getPostById(idPost);
+			if(post == null) {
+				throw new NotFoundException("Il post non è stato trovato.");
+			}
+			if(utente.getAdmin() || utente.getId() == post.getUtente().getId()) {
+				post.setVisibile(false);
+				postRepository.save(post);
+			} else {
+				throw new InvalidFields("Devi essere admin o proprietario del post.");
+			}
 		} catch (Exception e) {
 			throw new Exception(e);
 		}

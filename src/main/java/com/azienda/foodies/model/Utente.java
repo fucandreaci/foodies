@@ -36,6 +36,7 @@ public class Utente {
     private String password;
     private String biografia;
     private String immagineProfilo;
+    private Boolean admin;
     
     @OneToMany(mappedBy = "utente")
     @JsonIgnore
@@ -167,7 +168,14 @@ public class Utente {
 		this.unlikes = unlikes;
 	}
 	
-	
+
+	public Boolean getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(Boolean admin) {
+		this.admin = admin;
+	}
 
 	@Override
 	public String toString() {

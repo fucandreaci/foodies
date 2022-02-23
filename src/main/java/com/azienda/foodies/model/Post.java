@@ -17,6 +17,8 @@ public class Post {
     private LocalDateTime dataPubblicazione;
     private String immagine;
 	private LocalDateTime lastUpdate;
+	
+	private Boolean visibile;
     
     @ManyToOne
     @JoinColumn(name = "id_utente")
@@ -144,11 +146,19 @@ public class Post {
 		this.lastUpdate = lastUpdate;
 	}
 
+	public Boolean getVisibile() {
+		return visibile;
+	}
+
+	public void setVisibile(Boolean visibile) {
+		this.visibile = visibile;
+	}
+
 	@Override
 	public String toString() {
 		return "Post [id=" + id + ", descrizione=" + descrizione + ", dataPubblicazione=" + dataPubblicazione
 				+ ", immagine=" + immagine + ", categorie=" + categorie
-				+ ", hashtags=" + hashtags + "]";
+				+ ", hashtags=" + hashtags + ", visibile= " + visibile + "]";
 	}
 	
 }

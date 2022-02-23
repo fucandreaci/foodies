@@ -4,6 +4,7 @@ import com.azienda.foodies.DTO.PostDTO;
 import com.azienda.foodies.DTO.UtenteDTOLogin;
 import com.azienda.foodies.exception.AlreadyPutLikeException;
 import com.azienda.foodies.exception.AutolikeException;
+import com.azienda.foodies.exception.InvalidFields;
 import com.azienda.foodies.exception.NotFoundException;
 import com.azienda.foodies.model.Post;
 
@@ -233,6 +234,25 @@ public class PostRest {
 
 			return new ResponseEntity<>(changed, HttpStatus.OK);
 		}catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("Errore imprevisto nel server", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@DeleteMapping("deletePost/{idPost}")
+	public ResponseEntity<?> deletePost (@RequestBody UtenteDTOLogin utenteDTO, @PathVariable("idPost") Integer idPost){
+		try {
+			Utente utente = serviceManager.getUtente(utenteDTO.getUsername(), utenteDTO.getPassword());
+			if(utente == null) {
+				return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			}
+			
+			serviceManager.deletePost(utente, idPost);
+			return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+			
+		} catch(InvalidFields | NotFoundException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("Errore imprevisto nel server", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
