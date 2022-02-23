@@ -2,6 +2,9 @@ package com.azienda.foodies.rest;
 
 import com.azienda.foodies.DTO.PostDTO;
 import com.azienda.foodies.DTO.UtenteDTOLogin;
+import com.azienda.foodies.exception.AlreadyPutLikeException;
+import com.azienda.foodies.exception.AutolikeException;
+import com.azienda.foodies.exception.NotFoundException;
 import com.azienda.foodies.model.Post;
 
 import com.azienda.foodies.model.Utente;
@@ -147,6 +150,46 @@ public class PostRest {
 			if (posts.size() == 0)
 				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 			return new ResponseEntity<>(posts, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PostMapping("/addLike/{postId}")
+	public ResponseEntity<?> addLike (@RequestBody UtenteDTOLogin utenteDTO, @PathVariable("postId") Integer postId) {
+		try {
+			Utente utente = serviceManager.getUtente(utenteDTO.getUsername(), utenteDTO.getPassword());
+
+			// Credenziali utente non valide
+			if (utente == null)
+				return new ResponseEntity<>("Credenziali non valide", HttpStatus.BAD_REQUEST);
+
+			serviceManager.addLike(utente, postId);
+			return ResponseEntity.ok("Like aggiunto");
+		} catch (NotFoundException | AlreadyPutLikeException | AutolikeException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PostMapping("/addUnLike/{postId}")
+	public ResponseEntity<?> addUnLike (@RequestBody UtenteDTOLogin utenteDTO, @PathVariable("postId") Integer postId) {
+		try {
+			Utente utente = serviceManager.getUtente(utenteDTO.getUsername(), utenteDTO.getPassword());
+
+			// Credenziali utente non valide
+			if (utente == null)
+				return new ResponseEntity<>("Credenziali non valide", HttpStatus.BAD_REQUEST);
+
+			serviceManager.addUnLike(utente, postId);
+			return ResponseEntity.ok("Unlike aggiunto");
+		} catch (NotFoundException | AlreadyPutLikeException | AutolikeException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
