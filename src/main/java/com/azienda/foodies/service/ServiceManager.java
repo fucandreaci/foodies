@@ -101,7 +101,7 @@ public class ServiceManager {
 	}
 
 	public List<Post> getAllPosts () throws Exception {
-		return postRepository.findAll();
+		return postRepository.findByVisibile(true);
 	}
 
 	public Post inserisciPost (Post post) throws Exception {
@@ -112,18 +112,18 @@ public class ServiceManager {
 		}
 	}
 	public List<Post> getPostsByUser (Integer userId) {
-		return postRepository.getPostByUtente(userId);
+		return postRepository.getPostByUtenteAndVisibile(userId, true);
 	}
 
 	public List<Post> getPostsLastUpdateBetween(LocalDateTime from, LocalDateTime to) {
-		return postRepository.getPostByLastUpdateBetween(from, to);
+		return postRepository.getPostByLastUpdateBetweenAndVisibile(from, to, true);
 	}
 
 	public List<Post> getPostContainsTitoloOrTesto (String titolo, String testo) {
-		return postRepository.findAllByTitoloContainsOrDescrizioneContains(titolo, testo);
+		return postRepository.findByTitoloContainsOrDescrizioneContainsAndVisibileTrue(titolo, testo);
 	}
 	public List<Post> getPostContainsTitoloOrTestoProprietario (String titolo, String testo, Utente u) {
-		return postRepository.findAllByTitoloContainsOrDescrizioneContainsAndUtenteEquals(titolo, testo, u);
+		return postRepository.findByTitoloContainsOrDescrizioneContainsAndUtenteEqualsAndVisibile(titolo, testo, u, true);
 	}
 
 	public List<Utente> findLikers (Integer postId) {
@@ -131,7 +131,7 @@ public class ServiceManager {
 	}
 
 	public Post getPostById (Integer id) {
-		Optional<Post> post = postRepository.findById(id);
+		Optional<Post> post = postRepository.findByIdAndVisibile(id, true);
 		return post.isPresent() ? post.get() : null;
 	}
 
@@ -176,7 +176,7 @@ public class ServiceManager {
 	}
 
 	public List<Post> getPostsLastUpdateBetween(LocalDateTime from, LocalDateTime to, Utente utente) {
-		return postRepository.getPostByLastUpdateBetweenAndUtenteEquals(from, to, utente);
+		return postRepository.getPostByLastUpdateBetweenAndUtenteEqualsAndVisibile(from, to, utente, true);
 	}
 
 	public Post patchPost (Post post, PostDTO postDTO) throws Exception {

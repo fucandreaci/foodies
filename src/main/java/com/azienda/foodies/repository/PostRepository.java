@@ -7,12 +7,15 @@ import com.azienda.foodies.model.Post;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface PostRepository extends CrudRepository<Post, Integer> {
+	List<Post> findByVisibile(Boolean visibile);
+	Optional<Post> findByIdAndVisibile(Integer id, Boolean visibile);
     public List<Post> findAll();
-    List<Post> getPostByUtente (Integer userid);
-    List<Post> getPostByLastUpdateBetween(LocalDateTime from, LocalDateTime to);
-    List<Post> findAllByTitoloContainsOrDescrizioneContains (String titolo, String descrizione);
-    List<Post> findAllByTitoloContainsOrDescrizioneContainsAndUtenteEquals (String titolo, String descrizione, Utente user);
-    List<Post> getPostByLastUpdateBetweenAndUtenteEquals(LocalDateTime from, LocalDateTime to, Utente utente);
+    List<Post> getPostByUtenteAndVisibile (Integer userid, Boolean visibile);
+    List<Post> getPostByLastUpdateBetweenAndVisibile(LocalDateTime from, LocalDateTime to, Boolean visibile);
+    List<Post> findByTitoloContainsOrDescrizioneContainsAndVisibileTrue (String titolo, String descrizione);
+    List<Post> findByTitoloContainsOrDescrizioneContainsAndUtenteEqualsAndVisibile (String titolo, String descrizione, Utente user, Boolean visibile);
+    List<Post> getPostByLastUpdateBetweenAndUtenteEqualsAndVisibile(LocalDateTime from, LocalDateTime to, Utente utente, Boolean visibile);
 }

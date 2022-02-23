@@ -1,5 +1,6 @@
 package com.azienda.foodies.rest;
 
+import com.azienda.foodies.DTO.DateDTO;
 import com.azienda.foodies.DTO.PostDTO;
 import com.azienda.foodies.DTO.UtenteDTOLogin;
 import com.azienda.foodies.exception.AlreadyPutLikeException;
@@ -11,6 +12,7 @@ import com.azienda.foodies.model.Post;
 import com.azienda.foodies.model.Utente;
 import com.azienda.foodies.model.UtenteDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -85,6 +87,7 @@ public class PostRest {
 				post1.setDataPubblicazione(LocalDateTime.now());
 				post1.setImmagine(post.getImmagine());
 				post1.setUtente(user);
+				post1.setVisibile(true);
 
 				//TODO: Creazione tabella hashatag
 
@@ -96,17 +99,17 @@ public class PostRest {
 		}
 	}
 
-	@GetMapping("/getLastUpdateBetween/{from}/{to}")
-	public ResponseEntity<?> getByLastUpdate(@RequestBody UtenteDTOLogin utenteDTO, @PathVariable("from") LocalDateTime from, @PathVariable("to") LocalDateTime to) {
+	@GetMapping("/getLastUpdateBetween")
+	public ResponseEntity<?> getByLastUpdate(@RequestBody DateDTO dateDTO) {
 		try {
-			Utente utente = serviceManager.getUtente(utenteDTO.getUsername(), utenteDTO.getPassword());
+			Utente utente = serviceManager.getUtente(dateDTO.getUsername(), dateDTO.getPassword());
 
 			// Credenziali utente non valide
 			if (utente == null)
 				return new ResponseEntity<>("Credenziali non valide", HttpStatus.BAD_REQUEST);
 
 			// Get posts dell'utente
-			List<Post> posts = serviceManager.getPostsLastUpdateBetween(from, to);
+			List<Post> posts = serviceManager.getPostsLastUpdateBetween(dateDTO.getFrom(), dateDTO.getTo());
 
 			// Controllo se la lista è vuota ritorno 404 altrimenti 200 con la lista dei post
 			if (posts.size() == 0)

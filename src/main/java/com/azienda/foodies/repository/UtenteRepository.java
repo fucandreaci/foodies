@@ -14,12 +14,12 @@ public interface UtenteRepository extends CrudRepository<Utente, Integer>{
 	public List<Utente> findByUsername(String username);
 	public List<Utente> findByEmail(String username);
 
-	@Query("select u from Utente u join u.likes l where l.id = :postId")
+	@Query("select u from Utente u join u.likes l where l.id = :postId and l.visibile = 1")
 	List<Utente> findLikers (@Param("postId") Integer postId);
 
-	@Query("select u from Utente u join u.likes l where l.id = :postId and u.id = :userId")
+	@Query("select u from Utente u join u.likes l where l.id = :postId and u.id = :userId and l.visibile = 1")
 	Optional<Utente> hasPutLike (@Param("postId") Integer postId, @Param("userId") Integer userId);
 
-	@Query("select u from Utente u join u.unlikes l where l.id = :postId and u.id = :userId")
+	@Query("select u from Utente u join u.unlikes l where l.id = :postId and u.id = :userId and l.visibile = 1")
 	Optional<Utente> hasPutUnLike (@Param("postId") Integer postId, @Param("userId") Integer userId);
 }
