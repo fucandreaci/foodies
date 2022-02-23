@@ -3,6 +3,7 @@ package com.azienda.foodies.service;
 import java.util.List;
 
 import com.azienda.foodies.model.Post;
+import com.azienda.foodies.model.UtenteDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service("ServiceManager")
 @Transactional
@@ -96,9 +98,6 @@ public class ServiceManager {
 			throw new InvalidFields("Uno o più campi sono vuoti.");
 		}
 	}
-	
-	
-	
 
 	public List<Post> getAllPosts () throws Exception {
 		return postRepository.findAll();
@@ -117,5 +116,26 @@ public class ServiceManager {
 
 	public List<Post> getPostsLastUpdateBetween(LocalDateTime from, LocalDateTime to) {
 		return postRepository.getPostByLastUpdateBetween(from, to);
+	}
+
+	public List<Post> getPostsLastUpdateBetween(LocalDateTime from, LocalDateTime to, Utente utente) {
+		return postRepository.getPostByLastUpdateBetweenAndUtenteEquals(from, to, utente);
+	}
+
+	public Optional<Post> getPostById (Integer idPost) {
+		return postRepository.findById(idPost);
+	}
+
+	public Post patchPost (Post post, String titolo, String descrizione) throws Exception {
+		try {
+			if (titolo != null) post.setTitolo(titolo);
+			if (descrizione != null) post.setDescrizione(descrizione);
+
+			post.setLastUpdate(LocalDateTime.now());
+
+			return postRepository.save(post);
+		} catch (Exception e) {
+			throw new Exception(e);
+		}
 	}
 }

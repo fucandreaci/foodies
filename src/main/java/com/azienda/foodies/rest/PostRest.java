@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import com.azienda.foodies.service.ServiceManager;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/posts", produces = "application/json")
@@ -101,4 +103,50 @@ public class PostRest {
 		}
 	}
 
+	@PostMapping("/ownPostByLastUpdate/{from}/{to}")
+	public ResponseEntity<List<Post>> getOwnPostsByLastUpdate (@RequestBody UtenteDTO utenteDTO, @PathVariable("from") LocalDateTime from, @PathVariable("to") LocalDateTime to) {
+		try {
+			Utente utente = serviceManager.getUtente(utenteDTO.getUsername(), utenteDTO.getPassword());
+
+			if (utente == null) {
+				return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			}
+
+			List<Post> posts = serviceManager.getPostsLastUpdateBetween(from, to, utente);
+
+
+			if (!posts.isEmpty()) {
+				return new ResponseEntity<>(posts, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PatchMapping("patchPost/{idPost}/{titolo}/{descrizione}")
+	public ResponseEntity<?> patchPost (@RequestBody UtenteDTO utenteDTO, @PathVariable("idPost") Integer idPost, @PathVariable("titolo") String titolo, @PathVariable("descrizione") String descrizione) {
+		try {
+			Optional<Post> opt = serviceManager.getPostById(idPost);
+			Utente utente = serviceManager.getUtente(utenteDTO.getUsername(), utenteDTO.getPassword());
+			if (opt.isPresent()) {
+
+				Post post = opt.get();
+				if (utente == null || post.getUtente().getId() == utente.getId()) {
+					return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+				}
+
+				Post changed = serviceManager.patchPost(post, titolo, descrizione);
+
+				return new ResponseEntity<>(changed, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>("Post da aggiornare non trovato", HttpStatus.BAD_REQUEST);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("Errore imprevisto nel server", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }
