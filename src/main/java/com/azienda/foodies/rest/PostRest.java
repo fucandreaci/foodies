@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import com.azienda.foodies.service.ServiceManager;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/posts", produces = "application/json")
@@ -156,6 +157,29 @@ public class PostRest {
 		}
 	}
 
+	@PostMapping("/ownPostByLastUpdate/{from}/{to}")
+	public ResponseEntity<List<Post>> getOwnPostsByLastUpdate (@RequestBody UtenteDTO utenteDTO, @PathVariable("from") LocalDateTime from, @PathVariable("to") LocalDateTime to) {
+		try {
+			Utente utente = serviceManager.getUtente(utenteDTO.getUsername(), utenteDTO.getPassword());
+
+			if (utente == null) {
+				return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			}
+
+			List<Post> posts = serviceManager.getPostsLastUpdateBetween(from, to, utente);
+
+
+			if (!posts.isEmpty()) {
+				return new ResponseEntity<>(posts, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@PostMapping("/addLike/{postId}")
 	public ResponseEntity<?> addLike (@RequestBody UtenteDTOLogin utenteDTO, @PathVariable("postId") Integer postId) {
 		try {
@@ -193,6 +217,24 @@ public class PostRest {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PatchMapping("patchPost/{idPost}/{titolo}/{descrizione}")
+	public ResponseEntity<?> patchPost (@RequestBody UtenteDTO utenteDTO, @PathVariable("idPost") Integer idPost, @PathVariable("titolo") String titolo, @PathVariable("descrizione") String descrizione) {
+		try {
+			Post post = serviceManager.getPostById(idPost);
+			Utente utente = serviceManager.getUtente(utenteDTO.getUsername(), utenteDTO.getPassword());
+			if (post == null || utente == null || post.getUtente().getId() == utente.getId()) {
+				return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			}
+
+			Post changed = serviceManager.patchPost(post, titolo, descrizione);
+
+			return new ResponseEntity<>(changed, HttpStatus.OK);
+		}catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("Errore imprevisto nel server", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }

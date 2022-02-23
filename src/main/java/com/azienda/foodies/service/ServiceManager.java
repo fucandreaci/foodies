@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.azienda.foodies.exception.*;
 import com.azienda.foodies.model.Post;
+import com.azienda.foodies.model.UtenteDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -170,5 +171,22 @@ public class ServiceManager {
 
 		postRepository.save(post);
 		utenteRepository.save(u);
+	}
+
+	public List<Post> getPostsLastUpdateBetween(LocalDateTime from, LocalDateTime to, Utente utente) {
+		return postRepository.getPostByLastUpdateBetweenAndUtenteEquals(from, to, utente);
+	}
+
+	public Post patchPost (Post post, String titolo, String descrizione) throws Exception {
+		try {
+			if (titolo != null) post.setTitolo(titolo);
+			if (descrizione != null) post.setDescrizione(descrizione);
+
+			post.setLastUpdate(LocalDateTime.now());
+
+			return postRepository.save(post);
+		} catch (Exception e) {
+			throw new Exception(e);
+		}
 	}
 }

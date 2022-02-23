@@ -3,7 +3,6 @@ package com.azienda.foodies.repository;
 import java.util.List;
 import java.util.Optional;
 
-import com.azienda.foodies.model.Post;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
