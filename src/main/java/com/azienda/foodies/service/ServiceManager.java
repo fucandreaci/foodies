@@ -2,6 +2,7 @@ package com.azienda.foodies.service;
 
 import java.util.List;
 
+import com.azienda.foodies.DTO.PostDTO;
 import com.azienda.foodies.exception.*;
 import com.azienda.foodies.model.Post;
 import com.azienda.foodies.model.UtenteDTO;
@@ -177,10 +178,10 @@ public class ServiceManager {
 		return postRepository.getPostByLastUpdateBetweenAndUtenteEquals(from, to, utente);
 	}
 
-	public Post patchPost (Post post, String titolo, String descrizione) throws Exception {
+	public Post patchPost (Post post, PostDTO postDTO) throws Exception {
 		try {
-			if (titolo != null) post.setTitolo(titolo);
-			if (descrizione != null) post.setDescrizione(descrizione);
+			if (postDTO.getTitolo() != null) post.setTitolo(postDTO.getTitolo());
+			if (postDTO.getDescrizione() != null) post.setDescrizione(postDTO.getDescrizione());
 
 			post.setLastUpdate(LocalDateTime.now());
 
