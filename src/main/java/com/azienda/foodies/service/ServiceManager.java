@@ -7,6 +7,7 @@ import com.azienda.foodies.exception.*;
 import com.azienda.foodies.model.Post;
 import com.azienda.foodies.model.UtenteDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,22 @@ public class ServiceManager {
 	
 	@Autowired
 	private CategoriaRepository categoriaRepository;
+	
+	@Bean("AdminBean")
+	public void creaAdmin() {
+		if(utenteRepository.findByUsername("Admin").size() == 0) {
+			Utente admin = new Utente();
+			admin.setNome("Andrea");
+			admin.setCognome("Fucci");
+			admin.setEmail("andreafuccifigo@gmail.com");
+			admin.setUsername("Admin");
+			admin.setPassword("1234");
+			
+			admin.setAdmin(true);
+			
+			utenteRepository.save(admin);
+		}
+	}
 	
 	public Utente getUtente(String username, String password){
 		List<Utente> u = utenteRepository.findByUsernameAndPassword(username, password);
@@ -101,7 +118,7 @@ public class ServiceManager {
 	}
 
 	public List<Post> getAllPosts () throws Exception {
-		return postRepository.findByVisibile(true);
+		return postRepository.findByVisibileTrue();
 	}
 
 	public Post inserisciPost (Post post) throws Exception {
@@ -111,19 +128,19 @@ public class ServiceManager {
 			throw new Exception(e);
 		}
 	}
-	public List<Post> getPostsByUser (Integer userId) {
-		return postRepository.getPostByUtenteAndVisibile(userId, true);
+	public List<Post> getPostsByUser (Utente utente) {
+		return postRepository.getPostByUtenteAndVisibileTrue(utente);
 	}
 
 	public List<Post> getPostsLastUpdateBetween(LocalDateTime from, LocalDateTime to) {
-		return postRepository.getPostByLastUpdateBetweenAndVisibile(from, to, true);
+		return postRepository.getPostByLastUpdateBetweenAndVisibileTrue(from, to);
 	}
 
 	public List<Post> getPostContainsTitoloOrTesto (String titolo, String testo) {
 		return postRepository.findByTitoloContainsOrDescrizioneContainsAndVisibileTrue(titolo, testo);
 	}
 	public List<Post> getPostContainsTitoloOrTestoProprietario (String titolo, String testo, Utente u) {
-		return postRepository.findByTitoloContainsOrDescrizioneContainsAndUtenteEqualsAndVisibile(titolo, testo, u, true);
+		return postRepository.findByTitoloContainsOrDescrizioneContainsAndUtenteEqualsAndVisibileTrue(titolo, testo, u);
 	}
 
 	public List<Utente> findLikers (Integer postId) {
@@ -131,7 +148,7 @@ public class ServiceManager {
 	}
 
 	public Post getPostById (Integer id) {
-		Optional<Post> post = postRepository.findByIdAndVisibile(id, true);
+		Optional<Post> post = postRepository.findByIdAndVisibileTrue(id);
 		return post.isPresent() ? post.get() : null;
 	}
 
@@ -176,7 +193,7 @@ public class ServiceManager {
 	}
 
 	public List<Post> getPostsLastUpdateBetween(LocalDateTime from, LocalDateTime to, Utente utente) {
-		return postRepository.getPostByLastUpdateBetweenAndUtenteEqualsAndVisibile(from, to, utente, true);
+		return postRepository.getPostByLastUpdateBetweenAndUtenteEqualsAndVisibileTrue(from, to, utente);
 	}
 
 	public Post patchPost (Post post, PostDTO postDTO) throws Exception {

@@ -2,6 +2,7 @@ package com.azienda.foodies;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import com.azienda.foodies.service.ServiceManager;
 
@@ -9,7 +10,8 @@ import com.azienda.foodies.service.ServiceManager;
 public class FoodiesApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(FoodiesApplication.class, args);
+        ConfigurableApplicationContext configurableApplicationContext = SpringApplication.run(FoodiesApplication.class, args);
+        configurableApplicationContext.getBean("AdminBean");
     }
 
 }

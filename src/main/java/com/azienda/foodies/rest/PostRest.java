@@ -12,7 +12,6 @@ import com.azienda.foodies.model.Post;
 import com.azienda.foodies.model.Utente;
 import com.azienda.foodies.model.UtenteDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +21,6 @@ import com.azienda.foodies.service.ServiceManager;
 import java.time.LocalDateTime;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/posts", produces = "application/json")
@@ -62,7 +60,7 @@ public class PostRest {
 				return new ResponseEntity<>("Credenziali non valide", HttpStatus.BAD_REQUEST);
 
 			// Get posts dell'utente
-			List<Post> posts = serviceManager.getPostsByUser(utente.getId());
+			List<Post> posts = serviceManager.getPostsByUser(utente);
 
 			// Controllo se la lista è vuota ritorno 404 altrimenti 200 con la lista dei post
 			if (posts.size() == 0)
