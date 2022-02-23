@@ -1,5 +1,6 @@
 package com.azienda.foodies.repository;
 
+import com.azienda.foodies.model.Utente;
 import org.springframework.data.repository.CrudRepository;
 
 import com.azienda.foodies.model.Post;
@@ -12,4 +13,6 @@ public interface PostRepository extends CrudRepository<Post, Integer>{
     public List<Post> findAll();
     List<Post> getPostByUtente (Integer userid);
     List<Post> getPostByLastUpdateBetween(LocalDateTime from, LocalDateTime to);
+    List<Post> findAllByTitoloContainsOrDescrizioneContains (String titolo, String descrizione);
+    List<Post> findAllByTitoloContainsOrDescrizioneContainsAndUtenteEquals (String titolo, String descrizione, Utente user);
 }

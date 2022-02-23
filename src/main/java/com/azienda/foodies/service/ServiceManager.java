@@ -40,7 +40,7 @@ public class ServiceManager {
 	
 	public Utente getUtente(String username, String password){
 		List<Utente> u = utenteRepository.findByUsernameAndPassword(username, password);
-		
+
 		if(u == null || u.isEmpty())
 			return null;
 		else
@@ -117,5 +117,12 @@ public class ServiceManager {
 
 	public List<Post> getPostsLastUpdateBetween(LocalDateTime from, LocalDateTime to) {
 		return postRepository.getPostByLastUpdateBetween(from, to);
+	}
+
+	public List<Post> getPostContainsTitoloOrTesto (String titolo, String testo) {
+		return postRepository.findAllByTitoloContainsOrDescrizioneContains(titolo, testo);
+	}
+	public List<Post> getPostContainsTitoloOrTestoProprietario (String titolo, String testo, Utente u) {
+		return postRepository.findAllByTitoloContainsOrDescrizioneContainsAndUtenteEquals(titolo, testo, u);
 	}
 }

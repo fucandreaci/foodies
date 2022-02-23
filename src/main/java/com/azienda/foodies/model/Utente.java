@@ -7,6 +7,8 @@ package com.azienda.foodies.model;
  * Copyright © 2022-2022 Andrea Fucci
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 //import javax.persistence.GeneratedValue;
 //import javax.persistence.GenerationType;
@@ -36,6 +38,7 @@ public class Utente {
     private String immagineProfilo;
     
     @OneToMany(mappedBy = "utente")
+    @JsonIgnore
     private List<Post> posts = new ArrayList<Post>();
     
     @ManyToMany
