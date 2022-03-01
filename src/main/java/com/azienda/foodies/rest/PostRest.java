@@ -31,7 +31,8 @@ public class PostRest {
 	private ServiceManager serviceManager;
 
 	@GetMapping(path ="/getAll", consumes = "application/json")
-	public ResponseEntity<List<Post>> getAll(@RequestBody UtenteDTO utenteDTO) {
+	public ResponseEntity<List<Post>> getAll(@RequestHeader("username") String username, @RequestHeader("password") String password) {
+		UtenteDTO utenteDTO = new UtenteDTO(username, password);
 		try {
 			if (serviceManager.getUtente(utenteDTO.getUsername(), utenteDTO.getPassword()) != null) {
 				List<Post> posts = serviceManager.getAllPosts();
@@ -50,8 +51,9 @@ public class PostRest {
 	}
 
 	@GetMapping("/getByUser")
-	public ResponseEntity<?> getByUser(@RequestBody UtenteDTO utenteDTO) {
+	public ResponseEntity<?> getByUser(@RequestHeader("username") String username, @RequestHeader("password") String password) {
 		try {
+			UtenteDTO utenteDTO = new UtenteDTO(username, password);
 			//TODO: check user auth
 			Utente utente = serviceManager.getUtente(utenteDTO.getUsername(), utenteDTO.getPassword());
 
