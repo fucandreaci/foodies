@@ -194,7 +194,7 @@ public class PostRest {
 				return new ResponseEntity<>("Credenziali non valide", HttpStatus.BAD_REQUEST);
 
 			serviceManager.addLike(utente, postId);
-			return ResponseEntity.ok("Like aggiunto");
+			return ResponseEntity.ok(null);
 		} catch (NotFoundException | AlreadyPutLikeException | AutolikeException e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -214,7 +214,7 @@ public class PostRest {
 				return new ResponseEntity<>("Credenziali non valide", HttpStatus.BAD_REQUEST);
 
 			serviceManager.addUnLike(utente, postId);
-			return ResponseEntity.ok("Unlike aggiunto");
+			return ResponseEntity.ok(null);
 		} catch (NotFoundException | AlreadyPutLikeException | AutolikeException e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
