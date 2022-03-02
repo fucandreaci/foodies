@@ -99,7 +99,7 @@ public class PostRest {
 		}
 	}
 
-	@GetMapping("/getLastUpdateBetween")
+	@PostMapping("/getLastUpdateBetween")
 	public ResponseEntity<?> getByLastUpdate(@RequestBody DateDTO dateDTO) {
 		try {
 			Utente utente = serviceManager.getUtente(dateDTO.getUsername(), dateDTO.getPassword());
@@ -121,7 +121,7 @@ public class PostRest {
 		}
 	}
 
-	@GetMapping("/getTitoloOrDescrizioneContains")
+	@PostMapping("/getTitoloOrDescrizioneContains")
 	public ResponseEntity<?> getTitoloOrDescrizioneContains (@RequestBody PostDTO postDTO) {
 		try {
 			Utente utente = serviceManager.getUtente(postDTO.getUsername(), postDTO.getPassword());
@@ -141,7 +141,7 @@ public class PostRest {
 		}
 	}
 
-	@GetMapping("/getTitoloOrDescrizioneContainsProprietario")
+	@PostMapping("/getTitoloOrDescrizioneContainsProprietario")
 	public ResponseEntity<?> getTitoloOrDescrizioneContainsProprietario (@RequestBody PostDTO postDTO) {
 		try {
 			Utente utente = serviceManager.getUtente(postDTO.getUsername(), postDTO.getPassword());
@@ -161,7 +161,7 @@ public class PostRest {
 		}
 	}
 
-	@GetMapping("/ownPostByLastUpdate")
+	@PostMapping("/ownPostByLastUpdate")
 	public ResponseEntity<List<Post>> getOwnPostsByLastUpdate (@RequestBody DateDTO dateDTO) {
 		try {
 			Utente utente = serviceManager.getUtente(dateDTO.getUsername(), dateDTO.getPassword());
