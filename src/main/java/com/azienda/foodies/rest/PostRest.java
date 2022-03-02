@@ -243,9 +243,9 @@ public class PostRest {
 	}
 	
 	@DeleteMapping("deletePost/{idPost}")
-	public ResponseEntity<?> deletePost (@RequestBody UtenteDTOLogin utenteDTO, @PathVariable("idPost") Integer idPost){
+	public ResponseEntity<?> deletePost (@RequestHeader("username") String username, @RequestHeader("password") String password, @PathVariable("idPost") Integer idPost){
 		try {
-			Utente utente = serviceManager.getUtente(utenteDTO.getUsername(), utenteDTO.getPassword());
+			Utente utente = serviceManager.getUtente(username, password);
 			if(utente == null) {
 				return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 			}
