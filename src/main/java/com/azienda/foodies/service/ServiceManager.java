@@ -200,7 +200,8 @@ public class ServiceManager {
 		try {
 			if (postDTO.getTitolo() != null) post.setTitolo(postDTO.getTitolo());
 			if (postDTO.getDescrizione() != null) post.setDescrizione(postDTO.getDescrizione());
-
+			if (postDTO.getImmagine() != null) post.setImmagine(postDTO.getImmagine());
+			
 			post.setLastUpdate(LocalDateTime.now());
 
 			return postRepository.save(post);
