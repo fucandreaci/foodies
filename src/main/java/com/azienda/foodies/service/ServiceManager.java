@@ -140,6 +140,8 @@ public class ServiceManager {
 		return postRepository.findByVisibileIsAndTitoloContainsOrDescrizioneContains(true, titolo, testo);
 	}
 	public List<Post> getPostContainsTitoloOrTestoProprietario (String titolo, String testo, Utente u) {
+		if (titolo.equals("") && testo.equals(""))
+			return postRepository.getPostByUtenteAndVisibileTrue(u);
 		return postRepository.findByUtenteEqualsAndVisibileTrueAndTitoloContainsOrDescrizioneContains(u, titolo, testo);
 	}
 
