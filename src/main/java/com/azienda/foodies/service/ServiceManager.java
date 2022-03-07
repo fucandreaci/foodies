@@ -137,12 +137,31 @@ public class ServiceManager {
 	}
 
 	public List<Post> getPostContainsTitoloOrTesto (String titolo, String testo) {
-		return postRepository.findByVisibileIsAndTitoloContainsOrDescrizioneContains(true, titolo, testo);
+		if (titolo.equals("")) { //Titolo vuoto
+			if (testo.equals("")) // Descrizione vuota
+				return postRepository.findByVisibileTrue(); // prendo tutti i post
+			else
+				return postRepository.findByVisibileIsAndDescrizioneContains(true, testo); // Titolo vuoto, descrizione piena, prendo quelli la cui descrizione contiene
+		} else {  // Titolo pieno
+			if (testo.equals("")) // Titolo pieno e descrizione vuota
+				return postRepository.findByVisibileIsAndTitoloContains(true, titolo); // Titolo pieno e descrizione vuota, prendo i post il cui titolo fa match
+			else
+				return postRepository.findByVisibileIsAndTitoloContainsOrDescrizioneContains(true, titolo, testo); // è presente tutto quindi prendo dove entrambi matchano
+		}
 	}
 	public List<Post> getPostContainsTitoloOrTestoProprietario (String titolo, String testo, Utente u) {
-		if (titolo.equals("") && testo.equals(""))
-			return postRepository.getPostByUtenteAndVisibileTrue(u);
-		return postRepository.findByUtenteEqualsAndVisibileTrueAndTitoloContainsOrDescrizioneContains(u, titolo, testo);
+		if (titolo.equals("")) { //Titolo vuoto
+			if (testo.equals("")) // Descrizione vuota
+				return postRepository.getPostByUtenteAndVisibileTrue(u); // prendo tutti i post
+			else
+				return postRepository.findByUtenteEqualsAndVisibileTrueAndDescrizioneContains(u, testo); // Titolo vuoto, descrizione piena, prendo quelli la cui descrizione contiene
+		} else {  // Titolo pieno
+			if (testo.equals("")) // Titolo pieno e descrizione vuota
+				return postRepository.findByUtenteEqualsAndVisibileTrueAndTitoloContains(u, titolo); // Titolo pieno e descrizione vuota, prendo i post il cui titolo fa match
+			else
+				return postRepository.findByUtenteEqualsAndVisibileTrueAndTitoloContainsOrDescrizioneContains(u, titolo, testo); // è presente tutto quindi prendo dove entrambi matchano
+		}
+
 	}
 
 	public List<Utente> findLikers (Integer postId) {
