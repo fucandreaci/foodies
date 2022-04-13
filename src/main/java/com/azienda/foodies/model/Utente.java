@@ -1,4 +1,5 @@
-package com.azienda.foodies.model;/*
+package com.azienda.foodies.model;
+/*
  * File: Utente
  * Project: Foodies
  * File Created: 21/02/22 - 09:35
@@ -6,11 +7,21 @@ package com.azienda.foodies.model;/*
  * Copyright © 2022-2022 Andrea Fucci
  */
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+//import javax.persistence.GeneratedValue;
+//import javax.persistence.GenerationType;
+//import javax.persistence.Id;
+//import javax.persistence.JoinTable;
+//import javax.persistence.JoinColumn;
+//import javax.persistence.JoinColumns;
+//import javax.persistence.ManyToMany;
+//import javax.persistence.OneToMany;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Utente {
@@ -24,13 +35,31 @@ public class Utente {
     private String email;
     private String password;
     private String biografia;
-    private LocalDateTime dataFineBan;
     private String immagineProfilo;
+    private Boolean admin;
+    
+    @OneToMany(mappedBy = "utente")
+    @JsonIgnore
+    private List<Post> posts = new ArrayList<Post>();
+    
+    @ManyToMany
+    @JoinTable(name="likes",joinColumns =
+    @JoinColumn(name="utente_id"), inverseJoinColumns = 
+    @JoinColumn(name="post_id"))
+    @JsonIgnore
+    private List<Post> likes = new ArrayList<Post>();
+    
+    @ManyToMany
+    @JoinTable(name="unlikes",joinColumns =
+    @JoinColumn(name="utente_id"), inverseJoinColumns = 
+    @JoinColumn(name="post_id"))
+    @JsonIgnore
+    private List<Post> unlikes = new ArrayList<Post>();
 
     public Utente() {
     }
 
-    public Utente(int id, String nome, String cognome, String username, String email, String password, String biografia, LocalDateTime dataFineBan, String immagineProfilo) {
+	public Utente(int id, String nome, String cognome, String username, String email, String password, String biografia, String immagineProfilo) {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
@@ -38,18 +67,16 @@ public class Utente {
         this.email = email;
         this.password = password;
         this.biografia = biografia;
-        this.dataFineBan = dataFineBan;
         this.immagineProfilo = immagineProfilo;
     }
 
-    public Utente(String nome, String cognome, String username, String email, String password, String biografia, LocalDateTime dataFineBan, String immagineProfilo) {
+    public Utente(String nome, String cognome, String username, String email, String password, String biografia, String immagineProfilo) {
         this.nome = nome;
         this.cognome = cognome;
         this.username = username;
         this.email = email;
         this.password = password;
         this.biografia = biografia;
-        this.dataFineBan = dataFineBan;
         this.immagineProfilo = immagineProfilo;
     }
 
@@ -101,14 +128,6 @@ public class Utente {
         this.biografia = biografia;
     }
 
-    public LocalDateTime getDataFineBan() {
-        return dataFineBan;
-    }
-
-    public void setDataFineBan(LocalDateTime dataFineBan) {
-        this.dataFineBan = dataFineBan;
-    }
-
     public String getImmagineProfilo() {
         return immagineProfilo;
     }
@@ -116,4 +135,53 @@ public class Utente {
     public void setImmagineProfilo(String immagineProfilo) {
         this.immagineProfilo = immagineProfilo;
     }
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public List<Post> getPosts() {
+		return posts;
+	}
+
+	public void setPosts(List<Post> posts) {
+		this.posts = posts;
+	}
+
+	public List<Post> getLikes() {
+		return likes;
+	}
+
+	public void setLikes(List<Post> likes) {
+		this.likes = likes;
+	}
+
+	public List<Post> getUnlikes() {
+		return unlikes;
+	}
+
+	public void setUnlikes(List<Post> unlikes) {
+		this.unlikes = unlikes;
+	}
+	
+
+	public Boolean getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(Boolean admin) {
+		this.admin = admin;
+	}
+
+	@Override
+	public String toString() {
+		return "Utente [id=" + id + ", nome=" + nome + ", cognome=" + cognome + ", username=" + username + ", email="
+				+ email + ", password=" + password + ", biografia=" + biografia
+				+ ", immagineProfilo=" + immagineProfilo + ", posts=" + posts + ", likes=" + likes + ", unlikes="
+				+ unlikes + "]";
+	}
 }
